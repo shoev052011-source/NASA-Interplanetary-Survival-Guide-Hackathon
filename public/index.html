@@ -315,7 +315,38 @@
 
 		<div id="exitButton"></div>
 
-    </body>
+    <script id="auto-disable-layers">
+window.addEventListener('load', function() {
+    function turnOffLayers() {
+        // 1. Handle standard checkboxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
+            if (cb.checked) {
+                cb.click();
+                cb.checked = false;
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+
+        // 2. Handle custom menu buttons/toggles with active dots
+        document.querySelectorAll('[id*="hazard" i], [id*="path" i], [class*="toggle" i], [class*="switch" i], [class*="layer" i]').forEach(function(el) {
+            if (el.tagName !== 'INPUT') {
+                if (el.classList.contains('active') || el.classList.contains('on') || el.classList.contains('checked') || el.getAttribute('aria-checked') === 'true') {
+                    el.click();
+                    el.classList.remove('active', 'on', 'checked');
+                }
+            }
+        });
+    }
+    // Run right after load and once more after 3D scene finishes initializing
+    setTimeout(turnOffLayers, 100);
+    setTimeout(turnOffLayers, 500);
+});
+</script>
+</body>
 
 </html>
+
+
+
+
 
