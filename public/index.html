@@ -317,6 +317,7 @@
 
     <script id="auto-disable-layers">
 window.addEventListener('load', function() {
+    // 1. Turn off 3D layers and menu checkboxes on startup
     function turnOffLayers() {
         document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
             if (cb.checked) {
@@ -328,6 +329,28 @@ window.addEventListener('load', function() {
     }
     setTimeout(turnOffLayers, 150);
     setTimeout(turnOffLayers, 600);
+
+    // 2. Automatically replace any broken diamond/question symbols in the HUD text
+    function fixHudSymbols() {
+        var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        var node;
+        while ((node = walker.nextNode())) {
+            var t = node.nodeValue;
+            if (t && (t.indexOf('\uFFFD') !== -1 || t.indexOf('Green Route:') !== -1 || t.indexOf('Red Rectangles:') !== -1 || t.indexOf('&deg;') !== -1 || t.indexOf('&#') !== -1)) {
+                var fixed = t
+                    .replace(/\uFFFD\s*C/g, '\u00B0C')
+                    .replace(/&deg;\s*C/g, '\u00B0C')
+                    .replace(/(\d)\s*\uFFFD\s*([NSEW])/g, '$1\u00B0 $2')
+                    .replace(/(\d)&deg;\s*([NSEW])/g, '$1\u00B0 $2')
+                    .replace(/(\uFFFD|\?|&#9888;)\s*Red Rectangles:/g, '\u26A0 Red Rectangles:')
+                    .replace(/(\uFFFD|\?|&#10004;)\s*Green Route:/g, '\u2714 Green Route:');
+                if (fixed !== t) {
+                    node.nodeValue = fixed;
+                }
+            }
+        }
+    }
+    setInterval(fixHudSymbols, 250);
 });
 </script>
 </body>
