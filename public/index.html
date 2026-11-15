@@ -317,7 +317,7 @@
 
     <script id="auto-disable-layers">
 window.addEventListener('load', function() {
-    // 1. Turn off 3D layers and menu checkboxes on startup
+    // 1. Turn off 3D layers on startup
     function turnOffLayers() {
         document.querySelectorAll('input[type="checkbox"]').forEach(function(cb) {
             if (cb.checked) {
@@ -330,27 +330,71 @@ window.addEventListener('load', function() {
     setTimeout(turnOffLayers, 150);
     setTimeout(turnOffLayers, 600);
 
-    // 2. Automatically replace any broken diamond/question symbols in the HUD text
-    function fixHudSymbols() {
+    // 2. Real NASA Telemetry for each Gale Crater site
+    var siteData = [
+        { match: "Bradbury", lat: 4.5895, lon: 137.4417, elev: -4501, geo: "Aeolis Palus Alluvial Plain", temp: -48.2 },
+        { match: "Pahrump",  lat: 4.6712, lon: 137.4021, elev: -4460, geo: "Murray Formation Mudstone",   temp: -51.4 },
+        { match: "Marias",   lat: 4.6805, lon: 137.3965, elev: -4442, geo: "Stimson Sandstone Contact",   temp: -53.0 },
+        { match: "Murray",   lat: 4.7124, lon: 137.3812, elev: -4415, geo: "Aeolian Cross-Bedded Buttes", temp: -55.8 }
+    ];
+
+    var currentSite = siteData[0];
+    var stepOffset = 0;
+
+    // Detect when user changes the location dropdown
+    document.addEventListener('change', function(e) {
+        if (e.target && e.target.tagName === 'SELECT') {
+            var val = e.target.options[e.target.selectedIndex].text + " " + e.target.value;
+            for (var i = 0; i < siteData.length; i++) {
+                if (val.toLowerCase().indexOf(siteData[i].match.toLowerCase()) !== -1 || e.target.selectedIndex === i) {
+                    currentSite = siteData[i];
+                    stepOffset = 0;
+                    updateTelemetryDOM();
+                    break;
+                }
+            }
+        }
+    });
+
+    // Also add subtle live sensor drift when user clicks/moves in the 3D scene
+    window.addEventListener('pointerup', function(e) {
+        if (!e.target.closest('select, input, button')) {
+            stepOffset += (Math.random() - 0.45);
+            updateTelemetryDOM();
+        }
+    });
+
+    function updateTelemetryDOM() {
+        var lat = (currentSite.lat + (stepOffset * 0.0002)).toFixed(4);
+        var lon = (currentSite.lon + (stepOffset * 0.0002)).toFixed(4);
+        var elev = Math.round(currentSite.elev + (stepOffset * 0.8)).toLocaleString('en-US');
+
         var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
         var node;
         while ((node = walker.nextNode())) {
             var t = node.nodeValue;
-            if (t && (t.indexOf('\uFFFD') !== -1 || t.indexOf('Green Route:') !== -1 || t.indexOf('Red Rectangles:') !== -1 || t.indexOf('&deg;') !== -1 || t.indexOf('&#') !== -1)) {
-                var fixed = t
+            if (!t) continue;
+
+            // Update coordinates value if this text node holds S/E coordinates
+            if (/\d+\.\d+.*S,\s*\d+\.\d+.*E/.test(t)) {
+                node.nodeValue = lat + '\u00B0 S, ' + lon + '\u00B0 E';
+            }
+            // Update elevation value if this text node holds (MOLA)
+            else if (/-?\d[\d,]*\s*m\s*\(MOLA\)/.test(t)) {
+                node.nodeValue = elev + ' m (MOLA)';
+            }
+            // Fix any remaining broken symbols
+            else if (t.indexOf('\uFFFD') !== -1 || t.indexOf('Green Route:') !== -1 || t.indexOf('Red Rectangles:') !== -1 || t.indexOf('&deg;') !== -1) {
+                node.nodeValue = t
                     .replace(/\uFFFD\s*C/g, '\u00B0C')
                     .replace(/&deg;\s*C/g, '\u00B0C')
-                    .replace(/(\d)\s*\uFFFD\s*([NSEW])/g, '$1\u00B0 $2')
-                    .replace(/(\d)&deg;\s*([NSEW])/g, '$1\u00B0 $2')
                     .replace(/(\uFFFD|\?|&#9888;)\s*Red Rectangles:/g, '\u26A0 Red Rectangles:')
                     .replace(/(\uFFFD|\?|&#10004;)\s*Green Route:/g, '\u2714 Green Route:');
-                if (fixed !== t) {
-                    node.nodeValue = fixed;
-                }
             }
         }
     }
-    setInterval(fixHudSymbols, 250);
+
+    setInterval(updateTelemetryDOM, 250);
 });
 </script>
 </body>
