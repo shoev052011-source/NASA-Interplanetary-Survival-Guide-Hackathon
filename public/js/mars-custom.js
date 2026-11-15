@@ -68,9 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const telemetryBox = document.getElementById('telemetry-box');
     const marsLayers = document.getElementById('mars-layers');
 
-    // Ensure checkboxes are explicitly OFF by default
-    toggleHazards.checked = false;
-    togglePaths.checked = false;
+    // Ensure checkboxes are checked by default
+    toggleHazards.checked = true;
+    togglePaths.checked = true;
 
     function updateScene() {
         const currentSiteKey = siteSelect.value;
