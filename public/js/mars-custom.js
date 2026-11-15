@@ -6,7 +6,7 @@
   var SITES = {
     landing: {
       name: 'Bradbury Landing (Landing Site)',
-      coords: '4.5895° S, 137.4417° E',
+      coords: '4.5895&deg; S, 137.4417&deg; E',
       elev: '-4,501 m (MOLA)',
       formation: 'Aeolis Palus Alluvial Plain',
       hazardText: 'CAUTION: HIGH SLOPE SCOUR PITS & LOOSE ROCK DEBRIS',
@@ -24,7 +24,7 @@
     },
     pahrump: {
       name: 'Pahrump Hills (Basal Mt. Sharp)',
-      coords: '4.5912° S, 137.4011° E',
+      coords: '4.5912&deg; S, 137.4011&deg; E',
       elev: '-4,460 m (MOLA)',
       formation: 'Basal Mount Sharp Mudstone',
       hazardText: 'WARNING: HIGH SLOPE (>20°) & JAGGED ROCK OUTCROPS',
@@ -43,7 +43,7 @@
     },
     marias: {
       name: 'Marias Pass (Contact Zone)',
-      coords: '4.5981° S, 137.3885° E',
+      coords: '4.5981&deg; S, 137.3885&deg; E',
       elev: '-4,425 m (MOLA)',
       formation: 'Stimson-Murray Contact',
       hazardText: 'WARNING: STEEP ESCARPMENT SLOPES & FRACTURE ROCKS',
@@ -73,7 +73,7 @@
     },
     murray: {
       name: 'Murray Buttes (Bagnold Dune Gap)',
-      coords: '4.6382° S, 137.4019° E',
+      coords: '4.6382&deg; S, 137.4019&deg; E',
       elev: '-4,410 m (MOLA)',
       formation: 'Stimson Sandstone / Murray',
       hazardText: 'CAUTION: HIGH BUTTE TALUS SLOPES (>22°) & SHARP ROCKS',
@@ -227,9 +227,9 @@
 
         <div class="eva3-row"><span class="eva3-label">SUIT PRESSURE:</span><span id="eva3-press">29.6 kPa (NOMINAL)</span></div>
         <div class="eva3-row"><span class="eva3-label">SUIT BATTERY:</span><span id="eva3-batt">94.0%</span></div>
-        <div class="eva3-row"><span class="eva3-label">REMS EXT TEMP:</span><span id="eva3-temp">-48.2 °C (7.4 mbar)</span></div>
+        <div class="eva3-row"><span class="eva3-label">REMS EXT TEMP:</span><span id="eva3-temp">-48.2 &deg;C (7.4 mbar)</span></div>
         <div class="eva3-row"><span class="eva3-label">RAD DOSIMETER:</span><span id="eva3-rad">0.024 mSv/h</span></div>
-        <div class="eva3-row"><span class="eva3-label">COORDINATES:</span><span id="eva3-coords">4.5895° S, 137.4417° E</span></div>
+        <div class="eva3-row"><span class="eva3-label">COORDINATES:</span><span id="eva3-coords">4.5895&deg; S, 137.4417&deg; E</span></div>
         <div class="eva3-row"><span class="eva3-label">ELEVATION:</span><span id="eva3-elev">-4,501 m (MOLA)</span></div>
         <div class="eva3-row"><span class="eva3-label">GEOLOGY:</span><span id="eva3-geo">Aeolis Palus Alluvial Plain</span></div>
 
@@ -241,7 +241,7 @@
           <div class="eva3-layers-title">GALE CRATER 3D TERRAIN LAYERS</div>
           <label class="eva3-chk">
             <input type="checkbox" id="chk3-hazards" checked>
-            <span style="color:#ff5252;">■ Red Rectangles: High Slope & Rock Hazards</span>
+            <span style="color:#ff5252;">&#9888; Red Rectangles: High Slope & Rock Hazards</span>
           </label>
           <div class="eva3-legend">3D Rectangular Zones Marking High Slopes & Rocks</div>
           <label class="eva3-chk">
