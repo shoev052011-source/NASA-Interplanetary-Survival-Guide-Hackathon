@@ -1,4 +1,4 @@
-﻿/**
+/**
  * jpeg-worker
  *
  * Web worker for translating decoded jpeg data into an ArrayBuffer
